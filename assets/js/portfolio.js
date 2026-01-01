@@ -63,8 +63,10 @@ ctaButtons.forEach(button => {
     button.addEventListener('click', (e) => {
         e.preventDefault();
         scrollToSection('#contact');
-        // You can also add form focus or modal here
-        showMessage('Please fill out the contact form below.');
+        // Focus on the first form field after scrolling
+        setTimeout(() => {
+            document.getElementById('name')?.focus();
+        }, 500);
     });
 });
 
@@ -145,18 +147,37 @@ if (contactForm) {
         
         const name = document.getElementById('name')?.value.trim();
         const email = document.getElementById('email')?.value.trim();
+        const subject = document.getElementById('subject')?.value.trim();
         const message = document.getElementById('message')?.value.trim();
         
-        if (name && email && message) {
-            if (validateEmail(email)) {
-                showMessage('Thank you! Your message has been sent successfully.', 'success');
-                contactForm.reset();
-            } else {
-                showMessage('Please enter a valid email address.', 'error');
-            }
-        } else {
-            showMessage('Please fill out all fields.', 'error');
+        // Validate all required fields
+        if (!name) {
+            showMessage('Please enter your full name.', 'error');
+            return;
         }
+        if (!email) {
+            showMessage('Please enter your email address.', 'error');
+            return;
+        }
+        if (!validateEmail(email)) {
+            showMessage('Please enter a valid email address.', 'error');
+            return;
+        }
+        if (!subject) {
+            showMessage('Please enter a subject.', 'error');
+            return;
+        }
+        if (!message) {
+            showMessage('Please enter your message.', 'error');
+            return;
+        }
+        
+        // If all validations pass
+        showMessage('✓ Thank you! Your message has been sent successfully. We will get back to you soon!', 'success');
+        contactForm.reset();
+        
+        // Optional: Add functionality to send email via backend
+        // You can integrate with services like EmailJS, Formspree, or your own backend
     });
 }
 
