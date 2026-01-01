@@ -1,1 +1,0 @@
-console.log("Bot latest script loaded.");
